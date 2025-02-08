@@ -1,14 +1,24 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config'
 
-import alpinejs from '@astrojs/alpinejs';
-import tailwindcss from '@tailwindcss/vite';
+import alpinejs from '@astrojs/alpinejs'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [alpinejs()],
+    env: {
+        schema: {
+            URL_BACKEND: envField.string({
+                context: 'client',
+                access: 'public',
+            }),
+        },
+    },
+    integrations: [alpinejs()],
 
-  vite: {
-    plugins: [tailwindcss()]
-  }
-});
+    output: 'server',
+
+    vite: {
+        plugins: [tailwindcss()],
+    },
+})
