@@ -1,0 +1,97 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Task from '@/components/tasks/Task.astro'
+import TaskForm from '@/components/tasks/TaskForm.astro'
+import astroLogo from '@/assets/astro.svg'
+import background from '@/assets/background.svg'
+import Button from '@/components/Button.astro'
+---
+
+<Layout title="Tasks">
+    <div
+        class="max-w-4/12 mx-auto py-20 h-[inherit]"
+        x-data="{
+            openTaskFormDialog: false,
+            taskStore: $store.taskStore
+        }">
+        <div
+            x-show="taskStore.openTaskFormDialog"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="taskStore.openTaskFormDialog = false, taskStore.selectTask(null)"
+            class="fixed inset-0 bg-white-500/75 transition-opacity backdrop-blur-md z-10"
+            aria-hidden="true">
+        </div>
+
+        <div
+            x-show="taskStore.openTaskFormDialog"
+            class="fixed z-20 w-4/12">
+            <Button @click="taskStore.openTaskFormDialog = false, taskStore.selectTask(null)">Close</Button>
+            <TaskForm />
+        </div>
+
+        <section class="grid gap-4 mt-20">
+            <Button @click="taskStore.openTaskFormDialog = true, taskStore.selectTask(null)">Add task</Button>
+            <template x-for="task in taskStore.tasks">
+                <Task />
+            </template>
+        </section>
+    </div>
+</Layout>
+
+<script>
+    import Alpine from 'alpinejs'
+    import { TaskService } from '@/lib/app'
+
+    const taskService = new TaskService()
+
+    Alpine.store('taskStore', {
+        tasks: [] as { id: number | null; title: string; description: string; completed: boolean }[],
+        selectedTask: {} as { id: number | null; title: string; description: string; completed: boolean },
+        openTaskFormDialog: false as boolean,
+
+        async fetchTasks() {
+            this.tasks = await taskService.get()
+        },
+
+        async addOrUpdateTask({ id, title, description, completed }: { id: number; title: string; description: string; completed: boolean }): Promise<void> {
+            if (id) {
+                const updatedTask = await taskService.update(id, { title, description, completed })
+                if (updatedTask) {
+                    this.tasks = this.tasks.map((task: { id: number; title: string; description: string; completed: boolean }) => (task.id === updatedTask.id ? updatedTask : task))
+                    this.openOrCloseFormDialog(false)
+                }
+            } else {
+                const newTask = await taskService.create({ title, description, completed })
+                if (newTask) {
+                    this.tasks.push(newTask)
+                    this.selectTask(null)
+                    this.openOrCloseFormDialog(false)
+                }
+            }
+        },
+
+        async removeTask(id: number): Promise<void> {
+            const deletedTask = await taskService.delete(id)
+            if (deletedTask) {
+                this.tasks = this.tasks.filter((task: { id: number; title: string; description: string; completed: boolean }) => task.id !== id)
+            }
+        },
+
+        openOrCloseFormDialog(state: boolean) {
+            this.openTaskFormDialog = state
+        },
+
+        selectTask(task: { id: number; title: string; description: string; completed: boolean }) {
+            this.selectedTask = { ...task }
+        },
+
+        async init() {
+            await this.fetchTasks()
+        },
+    })
+</script>

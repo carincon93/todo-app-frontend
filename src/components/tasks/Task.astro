@@ -1,0 +1,84 @@
+---
+import { Trash2, Pencil, AlertTriangle } from 'lucide-astro'
+import Button from '@/components/Button.astro'
+---
+
+<div
+    x-data="{ openDeleteDialog: false }"
+    x-bind:class="{'z-1': openDeleteDialog, 'z-0': true}">
+    <div
+        x-show="openDeleteDialog"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @click="openDeleteDialog = false;"
+        class="fixed inset-0 bg-gray-500/75 transition-opacity z-0 backdrop-blur-md"
+        aria-hidden="true">
+    </div>
+
+    <div
+        x-bind:class="{
+        'hover:bg-amber-200/40 hover:cursor-pointer': !openDeleteDialog && !openTaskFormDialog,
+        'backdrop-blur-lg w-full rounded-md shadow bg-amber-200/20 relative z-20': true
+    }">
+        <div class="flex items-center justify-between">
+            <div
+                class="p-4 flex-1"
+                x-text="task.title">
+            </div>
+            <div class="actions flex flex-col items-stretch justify-between h-[inherit]">
+                <Button
+                    @click="taskStore.selectTask(task); taskStore.openTaskFormDialog = true"
+                    type="button"
+                    x-bind:disabled="openDeleteDialog || undefined"
+                    className="hover:bg-amber-400 rounded-tr-md border-amber-400 border-l border-r border-t">
+                    <Pencil
+                        fill="#ff8e00"
+                        size={16}
+                    />
+                </Button>
+
+                <div class="relative">
+                    <Button
+                        @click="openDeleteDialog = !openDeleteDialog;"
+                        type="button"
+                        className="bg-red-200 hover:bg-red-300 rounded-br-md border-red-300 border-l border-r border-b">
+                        <Trash2
+                            size={16}
+                            color="red"
+                        />
+                    </Button>
+
+                    <div
+                        x-show="openDeleteDialog"
+                        x-transition
+                        class="absolute bg-white rounded-md text-xs leading-3.5 w-[250px] p-2 -top-[100%] left-10 shadow-md"
+                        aria-hidden="true">
+                        <div class="flex items-center space-x-2">
+                            <figure class="bg-red-200 rounded-md p-1 text-center">
+                                <AlertTriangle
+                                    color="red"
+                                    size={16}
+                                />
+                            </figure>
+                            <span>¿Está seguro a que desea eliminar la tarea?</span>
+                        </div>
+                        <Button
+                            @click="taskStore.removeTask(task.id)"
+                            className="bg-red-500 text-white text-center rounded-md mt-2 block w-full hover:opacity-80 shadow-md">
+                            Seguro/a
+                        </Button>
+                        <Button
+                            @click="openDeleteDialog = !openDeleteDialog"
+                            className="bg-white text-black text-center rounded-md mt-2 block w-full hover:bg-gray-100 shadow-md">
+                            Cancelar
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

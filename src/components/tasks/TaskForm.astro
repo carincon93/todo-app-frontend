@@ -1,0 +1,63 @@
+---
+import Button from '@/components/Button.astro'
+---
+
+<form
+    x-data="{ 
+        id: null, 
+        title: '', 
+        description: '', 
+        completed: false
+    }"
+    x-init="() => { 
+        if ($store.taskStore.selectedTask) {
+            id = $store.taskStore.selectedTask?.id;
+            title = $store.taskStore.selectedTask?.title;
+            description = $store.taskStore.selectedTask?.description;
+            completed = $store.taskStore.selectedTask?.completed;
+        }
+    }"
+    x-effect="() => { 
+        if ($store.taskStore.selectedTask) {
+            id = $store.taskStore.selectedTask?.id;
+            title = $store.taskStore.selectedTask?.title;
+            description = $store.taskStore.selectedTask?.description;
+            completed = $store.taskStore.selectedTask?.completed;
+        }
+    }"
+    @submit.prevent="$store.taskStore.addOrUpdateTask({ id, title, description, completed });"
+    class="space-y-4 bg-white p-6 shadow-md rounded-md">
+    <label class="block">
+        <span class="text-gray-700">Title</span>
+        <input
+            x-model="title"
+            type="text"
+            class="w-full border p-2 rounded-md"
+            required
+        />
+    </label>
+
+    <label class="block">
+        <span class="text-gray-700">Description</span>
+        <textarea
+            x-model="description"
+            class="w-full border p-2 rounded-md"
+            required
+        ></textarea>
+    </label>
+
+    <label class="flex items-center space-x-2">
+        <input
+            type="checkbox"
+            x-model="completed"
+            class="w-4 h-4"
+        />
+        <span class="text-gray-700">Completed?</span>
+    </label>
+
+    <Button
+        type="submit"
+        className="bg-blue-500 text-white px-4 rounded-md hover:bg-blue-600">
+        Save
+    </Button>
+</form>
