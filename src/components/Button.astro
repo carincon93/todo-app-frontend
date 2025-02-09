@@ -1,0 +1,10 @@
+---
+const { className = '', type = 'button' } = Astro.props
+---
+
+<button
+    class={`p-2 transition-colors delay-[10] ${className}`}
+    type={type}
+    {...Astro.props}>
+    <slot />
+</button>
