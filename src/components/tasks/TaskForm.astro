@@ -27,37 +27,49 @@ import Button from '@/components/Button.astro'
     }"
     @submit.prevent="$store.taskStore.addOrUpdateTask({ id, title, description, completed });"
     class="space-y-4 bg-white p-6 shadow-md rounded-md">
-    <label class="block">
-        <span class="text-gray-700">Title</span>
+    <fieldset>
+        <label
+            class="block mb-2"
+            for="title">
+            Title *
+        </label>
         <input
+            id="title"
             x-model="title"
             type="text"
             class="w-full border p-2 rounded-md"
             required
         />
-    </label>
+    </fieldset>
 
-    <label class="block">
-        <span class="text-gray-700">Description</span>
+    <fieldset>
+        <label
+            class="block mb-2"
+            for="description">
+            Description
+        </label>
+
         <textarea
+            id="description"
             x-model="description"
             class="w-full border p-2 rounded-md"
-            required
         ></textarea>
-    </label>
+    </fieldset>
 
-    <label class="flex items-center space-x-2">
-        <input
-            type="checkbox"
-            x-model="completed"
-            class="w-4 h-4"
-        />
-        <span class="text-gray-700">Completed?</span>
-    </label>
+    <fieldset>
+        <label class="flex items-center space-x-2">
+            <input
+                type="checkbox"
+                x-model="completed"
+                class="w-4 h-4"
+            />
+            <span class="text-gray-700">Completed?</span>
+        </label>
+    </fieldset>
 
     <Button
         type="submit"
-        className="bg-blue-500 text-white px-4 rounded-md hover:bg-blue-600">
+        className="bg-amber-400 text-white px-4 rounded-md hover:bg-amber-300">
         Save
     </Button>
 </form>
