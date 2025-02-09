@@ -1,4 +1,6 @@
 ---
+import astroLogo from '@/assets/astro.svg'
+import background from '@/assets/background.svg'
 import '@/styles/global.css'
 import { ClientRouter } from 'astro:transitions'
 
@@ -34,8 +36,73 @@ const title = Astro.props.title
         <ClientRouter />
     </head>
     <body>
-        <main class="h-[inherit]">
+        <img
+            id="background"
+            src={background.src}
+            class="max-sm:!-top-[30%]"
+            alt=""
+            fetchpriority="high"
+        />
+        <main
+            class="h-[inherit] max-lg:max-w-10/12 lg:max-w-8/12 xl:max-w-6/12 2xl:max-w-4/12 mx-auto pt-20"
+            x-data="{
+            openTaskFormDialog: false,
+            taskStore: $store.taskStore
+        }">
             <slot />
         </main>
+
+        <script>
+            import Alpine from 'alpinejs'
+            import { TaskService } from '@/lib/app'
+
+            const taskService = new TaskService()
+
+            Alpine.store('taskStore', {
+                tasks: [] as { id: number | null; title: string; description: string; completed: boolean }[],
+                selectedTask: {} as { id: number | null; title: string; description: string; completed: boolean },
+                openTaskFormDialog: false as boolean,
+
+                async fetchTasks() {
+                    this.tasks = await taskService.get()
+                },
+
+                async addOrUpdateTask({ id, title, description, completed }: { id: number; title: string; description: string; completed: boolean }): Promise<void> {
+                    if (id) {
+                        const updatedTask = await taskService.update(id, { title, description, completed })
+                        if (updatedTask) {
+                            this.tasks = this.tasks.map((task: { id: number; title: string; description: string; completed: boolean }) => (task.id === updatedTask.id ? updatedTask : task))
+                            this.openOrCloseFormDialog(false)
+                        }
+                    } else {
+                        const newTask = await taskService.create({ title, description, completed })
+                        if (newTask) {
+                            this.tasks.push(newTask)
+                            this.selectTask(null)
+                            this.openOrCloseFormDialog(false)
+                        }
+                    }
+                },
+
+                async removeTask(id: number): Promise<void> {
+                    const deletedTask = await taskService.delete(id)
+                    if (deletedTask) {
+                        this.tasks = this.tasks.filter((task: { id: number; title: string; description: string; completed: boolean }) => task.id !== id)
+                    }
+                },
+
+                openOrCloseFormDialog(state: boolean) {
+                    this.openTaskFormDialog = state
+                },
+
+                selectTask(task: { id: number; title: string; description: string; completed: boolean }) {
+                    this.selectedTask = { ...task }
+                },
+
+                async init() {
+                    await this.fetchTasks()
+                },
+            })
+        </script>
     </body>
 </html>
