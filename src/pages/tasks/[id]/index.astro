@@ -1,0 +1,25 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { TaskService } from '@/lib/app'
+import { ArrowLeft } from 'lucide-astro'
+
+const { id } = Astro.params
+
+const taskService = new TaskService()
+const task = await taskService.getTaskById(id)
+---
+
+<Layout>
+    <div>
+        <a
+            href="/tasks"
+            class="bg-amber-400 inline-block p-2 rounded-md hover:opacity-75">
+            <ArrowLeft />
+        </a>
+        <h1 class="text-6xl font-semibold flex flex-col items-center mt-20">
+            {task?.title}
+            <span class={`${task?.completed ? 'bg-green-500' : 'bg-black'} text-white text-[14px] rounded-md shadow-md mt-8 p-2`}>{task?.completed ? 'Completed' : 'Incomplete'}</span>
+        </h1>
+        <p class="text-3xl mt-8">{task?.description}</p>
+    </div>
+</Layout>
