@@ -20,7 +20,6 @@ cd todo-app-frontend
 Renombre el archivo .env.example por .env y complete las siguientes variables de entorno:
 ```sh
 URL_BACKEND=""
-URL=""
 ```
 
 Ahora puede subir el servidor con el comando
