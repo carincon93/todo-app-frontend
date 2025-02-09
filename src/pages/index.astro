@@ -6,7 +6,13 @@ import Layout from '@/layouts/Layout.astro'
 ---
 
 <Layout>
-    <h1 class="text-center font-medium text-6xl">Bienvenido a tu lista de tareas</h1>
+    <div class="flex flex-col items-center justify-center h-[inherit] space-y-10">
+        <h1 class="text-white text-center font-bold text-[50px] leading-15 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] uppercase">ToDo App UManizales</h1>
 
-    <a href="/tasks">Ver mis tareas</a>
+        <a
+            href="/tasks"
+            class="inline-block bg-amber-400 hover:bg-amber-300 transition-colors delay-75 p-4 text-white text-center shadow-md mx-auto rounded-md">
+            Show all tasks
+        </a>
+    </div>
 </Layout>
