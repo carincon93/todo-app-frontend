@@ -23,5 +23,5 @@ URL_BACKEND=""
 URL=""
 ```
 
-Ahora puede subir el servidor
-| `pnpm run dev`             | Sube el servidor local en  `localhost:4321`      |
+Ahora puede subir el servidor con el comando
+| `pnpm run dev`             | Subirá en  `localhost:4321`      |
