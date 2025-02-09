@@ -22,13 +22,14 @@ import Button from '@/components/Button.astro'
     <div
         x-bind:class="{
         'hover:bg-amber-200/40 hover:cursor-pointer': !openDeleteDialog && !openTaskFormDialog,
-        'backdrop-blur-lg w-full rounded-md shadow bg-amber-200/20 relative z-20': true
+        'backdrop-blur-lg w-full rounded-md shadow bg-amber-200/90 relative z-20': true
     }">
         <div class="flex items-center justify-between">
-            <div
-                class="p-4 flex-1"
-                x-text="task.title">
-            </div>
+            <a
+                x-text="task.title"
+                class="underline p-4 block flex-1"
+                x-bind:href="`/tasks/${task.id}`"
+            ></a>
             <div class="actions flex flex-col items-stretch justify-between h-[inherit]">
                 <Button
                     @click="taskStore.selectTask(task); taskStore.openTaskFormDialog = true"
@@ -55,7 +56,7 @@ import Button from '@/components/Button.astro'
                     <div
                         x-show="openDeleteDialog"
                         x-transition
-                        class="absolute bg-white rounded-md text-xs leading-3.5 w-[250px] p-2 -top-[100%] left-10 shadow-md"
+                        class="absolute bg-white rounded-md text-xs leading-3.5 w-[250px] p-2 top-[100%] -left-[650%] shadow-md"
                         aria-hidden="true">
                         <div class="flex items-center space-x-2">
                             <figure class="bg-red-200 rounded-md p-1 text-center">
