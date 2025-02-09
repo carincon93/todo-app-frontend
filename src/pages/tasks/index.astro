@@ -2,18 +2,13 @@
 import Layout from '@/layouts/Layout.astro'
 import Task from '@/components/tasks/Task.astro'
 import TaskForm from '@/components/tasks/TaskForm.astro'
-import astroLogo from '@/assets/astro.svg'
-import background from '@/assets/background.svg'
 import Button from '@/components/Button.astro'
+
+import { X } from 'lucide-astro'
 ---
 
 <Layout title="Tasks">
-    <div
-        class="max-w-4/12 mx-auto py-20 h-[inherit]"
-        x-data="{
-            openTaskFormDialog: false,
-            taskStore: $store.taskStore
-        }">
+    <div class='h-[inherit]"'>
         <div
             x-show="taskStore.openTaskFormDialog"
             x-transition:enter="ease-out duration-300"
@@ -29,69 +24,26 @@ import Button from '@/components/Button.astro'
 
         <div
             x-show="taskStore.openTaskFormDialog"
-            class="fixed z-20 w-4/12">
-            <Button @click="taskStore.openTaskFormDialog = false, taskStore.selectTask(null)">Close</Button>
+            class="fixed z-20 w-full max-lg:max-w-10/12 lg:max-w-8/12 xl:max-w-6/12 2xl:max-w-4/12">
+            <Button
+                @click="taskStore.openTaskFormDialog = false, taskStore.selectTask(null)"
+                className="bg-white hover:opacity-80 shadow-md p-2 rounded-md mb-2"
+                ><X /></Button
+            >
             <TaskForm />
         </div>
 
-        <section class="grid gap-4 mt-20">
-            <Button @click="taskStore.openTaskFormDialog = true, taskStore.selectTask(null)">Add task</Button>
-            <template x-for="task in taskStore.tasks">
-                <Task />
-            </template>
+        <section>
+            <Button
+                @click="taskStore.openTaskFormDialog = true, taskStore.selectTask(null)"
+                className="bg-amber-400 hover:bg-amber-300 transition-colors delay-75 inline-block rounded-md text-white shrink-0">
+                Add task
+            </Button>
+            <div class="grid gap-4 mt-8">
+                <template x-for="task in taskStore.tasks">
+                    <Task />
+                </template>
+            </div>
         </section>
     </div>
 </Layout>
-
-<script>
-    import Alpine from 'alpinejs'
-    import { TaskService } from '@/lib/app'
-
-    const taskService = new TaskService()
-
-    Alpine.store('taskStore', {
-        tasks: [] as { id: number | null; title: string; description: string; completed: boolean }[],
-        selectedTask: {} as { id: number | null; title: string; description: string; completed: boolean },
-        openTaskFormDialog: false as boolean,
-
-        async fetchTasks() {
-            this.tasks = await taskService.get()
-        },
-
-        async addOrUpdateTask({ id, title, description, completed }: { id: number; title: string; description: string; completed: boolean }): Promise<void> {
-            if (id) {
-                const updatedTask = await taskService.update(id, { title, description, completed })
-                if (updatedTask) {
-                    this.tasks = this.tasks.map((task: { id: number; title: string; description: string; completed: boolean }) => (task.id === updatedTask.id ? updatedTask : task))
-                    this.openOrCloseFormDialog(false)
-                }
-            } else {
-                const newTask = await taskService.create({ title, description, completed })
-                if (newTask) {
-                    this.tasks.push(newTask)
-                    this.selectTask(null)
-                    this.openOrCloseFormDialog(false)
-                }
-            }
-        },
-
-        async removeTask(id: number): Promise<void> {
-            const deletedTask = await taskService.delete(id)
-            if (deletedTask) {
-                this.tasks = this.tasks.filter((task: { id: number; title: string; description: string; completed: boolean }) => task.id !== id)
-            }
-        },
-
-        openOrCloseFormDialog(state: boolean) {
-            this.openTaskFormDialog = state
-        },
-
-        selectTask(task: { id: number; title: string; description: string; completed: boolean }) {
-            this.selectedTask = { ...task }
-        },
-
-        async init() {
-            await this.fetchTasks()
-        },
-    })
-</script>
