@@ -1,4 +1,4 @@
-# ToDo App UManizales Installation
+# ToDo App Frontend UManizales Installation
 
 Sigue estos pasos para clonar y ejecutar el proyecto en tu máquina local.
 
