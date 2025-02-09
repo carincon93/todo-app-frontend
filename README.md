@@ -1,5 +1,8 @@
 # ToDo App Frontend UManizales Installation
 
+![496shots_so](https://github.com/user-attachments/assets/e79fe423-2589-42c4-8684-fb7e259b44de)
+
+
 Sigue estos pasos para clonar y ejecutar el proyecto en tu máquina local.
 
 ### 1️⃣ Clonar el repositorio
