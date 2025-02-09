@@ -34,23 +34,8 @@ const title = Astro.props.title
         <ClientRouter />
     </head>
     <body>
-        <main
-            class="h-[inherit]"
-            x-data="{ dialogOpened: false, openDeleteDialog: false }">
+        <main class="h-[inherit]">
             <slot />
-
-            <div
-                x-show="dialogOpened"
-                x-transition:enter="ease-out duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                @click="dialogOpened = !dialogOpened; openDeleteDialog = !openDeleteDialog"
-                class="fixed inset-0 bg-gray-500/75 transition-opacity z-0 backdrop-blur-md"
-                aria-hidden="true">
-            </div>
         </main>
     </body>
 </html>
