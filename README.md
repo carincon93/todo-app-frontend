@@ -17,7 +17,7 @@ cd todo-app-frontend
 | `pnpm run dev`             | Sube el servidor local en  `localhost:4321`      |
 
 ## 🧞 Configurar .env
-Renombre el archivo .env.example por .env y complete las siguientes variables de entorno
+Renombre el archivo .env.example por .env y complete las siguientes variables de entorno:
 ```sh
 URL_BACKEND=""
 URL=""
