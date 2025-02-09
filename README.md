@@ -9,13 +9,13 @@ git clone https://github.com/carincon93/todo-app-frontend.git
 cd todo-app-frontend
 ```
 
-## 🧞 Configurar .env
+## 📄 Configurar .env
 Renombre el archivo .env.example por .env y complete las siguientes variables de entorno:
 ```sh
 URL_BACKEND=""
 ```
 
-## 🧞 Comandos
+## ⌨️ Comandos
 
 | Comando                    | Acción                                           |
 | :------------------------- | :----------------------------------------------- |
