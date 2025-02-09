@@ -11,11 +11,28 @@ export class TaskService {
             })
 
             if (!response.ok) throw new Error(`Error fetching data`)
-            
 
             return await response.json()
         } catch (error) {
             console.error('Error getting tasks:', error)
+            return []
+        }
+    }
+
+    async getTaskById(id) {
+        try {
+            const response = await fetch(`${URL_BACKEND}/tasks/${id}`, {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                },
+            })
+
+            if (!response.ok) throw new Error(`Error fetching data`)
+
+            return await response.json()
+        } catch (error) {
+            console.error('Error getting task:', error)
             return []
         }
     }
